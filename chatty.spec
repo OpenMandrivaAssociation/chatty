@@ -4,12 +4,12 @@
 
 Name: chatty
 Version: 0.8.1
-Release: 1%{?dist}
+Release: 1
 Summary: A libpurple messaging client
-
-License: GPL-3.0-or-later AND LGPL-2.1-or-later
+Group:		Networking/Instant messaging
+License: GPL-3.0-or-later
 URL: https://gitlab.gnome.org/World/Chatty
-Source0: %{url}/-/archive/v%{version}/Chatty-v%{version}.tar.gz
+Source0: https://gitlab.gnome.org/World/Chatty/-/archive/v%{version}/Chatty-v%{version}.tar.bz2
 Source1: https://source.puri.sm/Librem5/libcmatrix/-/archive/%{libcmatrix_commit}/libcmatrix-%{libcmatrix_commit}.tar.gz
 
 # Chatty links against a libpurple private library (libjabber).

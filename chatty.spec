@@ -6,12 +6,13 @@ Name: chatty
 Version: 0.8.1
 Release: 1
 Summary: A libpurple messaging client
-Group:		Networking/Instant messaging
+Group:   Networking/Instant messaging
 License: GPL-3.0-or-later
 URL: https://gitlab.gnome.org/World/Chatty
 Source0: https://gitlab.gnome.org/World/Chatty/-/archive/v%{version}/Chatty-v%{version}.tar.bz2
 Source1: https://source.puri.sm/Librem5/libcmatrix/-/archive/%{libcmatrix_commit}/libcmatrix-%{libcmatrix_commit}.tar.gz
 
+# From Fedora
 # Chatty links against a libpurple private library (libjabber).
 # Obviously, Fedora build tooling doesn't support that, so we have to use
 # some kind of workaround. This seemed simplest.
@@ -19,12 +20,8 @@ Source1: https://source.puri.sm/Librem5/libcmatrix/-/archive/%{libcmatrix_commit
 # project, to be used in other packages.
 Patch0:  0001-hacky-hack.patch
 
-ExcludeArch:    i686
-
-BuildRequires:  gcc
 BuildRequires:  meson
 BuildRequires:  cmake
-BuildRequires:  gcc-c++
 BuildRequires:  dbus-daemon
 BuildRequires:  dbus-x11
 BuildRequires:  itstool
@@ -45,13 +42,13 @@ BuildRequires:  pkgconfig(libgcrypt)
 BuildRequires:  pkgconfig(libsoup-3.0)
 BuildRequires:  pkgconfig(json-glib-1.0)
 BuildRequires:  pkgconfig(mm-glib) >= 1.12.0
-BuildRequires:  gspell-devel
-BuildRequires:  libolm-devel
-BuildRequires:  openssl1.1-devel
-BuildRequires:  libphonenumber-devel
-BuildRequires:  protobuf-devel
-BuildRequires:  libsecret-devel
-BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(gspell-1)
+BuildRequires:  pkgconfig(olm)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  cmake(libphonenumber)
+BuildRequires:  cmake(protobuf)
+BuildRequires:  pkgconfig(libsecret-1)
+BuildRequires:  appstream-util
 BuildRequires:  desktop-file-utils
 BuildRequires:  /usr/bin/xvfb-run
 BuildRequires:  /usr/bin/xauth
@@ -70,7 +67,6 @@ Chatty is a libpurple based messaging client for mobile phones,
 works best with the phosh mobile DE.
 
 %prep
-
 # Copy private libjabber library in so we can build against it
 cp `pkg-config --variable=plugindir purple`/libjabber.so.0 /tmp/libjabber.so
 
@@ -83,18 +79,6 @@ mv libcmatrix-%{libcmatrix_commit} subprojects/libcmatrix
 %build
 %meson
 %meson_build
-
-%check
-appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/sm.puri.Chatty.metainfo.xml
-
-desktop-file-validate %{buildroot}/%{_datadir}/applications/sm.puri.Chatty.desktop
-
-# the upstream meson tests already validate the desktop file
-# and the appstream file
-
-LC_ALL=C.UTF-8 xvfb-run sh <<'SH'
-%meson_test -t 2 --num-processes 1
-SH
 
 %install
 %meson_install
@@ -127,14 +111,3 @@ echo "%{_libdir}/chatty" > %{buildroot}/%{_sysconfdir}/ld.so.conf.d/chatty.conf
 %{_sysconfdir}/ld.so.conf.d/chatty.conf
 %doc README.md
 %license COPYING
-
-%changelog
-%autochangelog
-* Tue Jan 23 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.8.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.8.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.7.3-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild

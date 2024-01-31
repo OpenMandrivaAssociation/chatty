@@ -24,6 +24,7 @@ BuildRequires:  meson
 BuildRequires:  cmake
 BuildRequires:  dbus-daemon
 BuildRequires:  dbus-x11
+BuildRequires:  gettext
 BuildRequires:  itstool
 BuildRequires:  pkgconfig(libebook-contacts-1.2)
 BuildRequires:  pkgconfig(libebook-1.2) >= 3.42.0

@@ -18,7 +18,7 @@ Source1: https://source.puri.sm/Librem5/libcmatrix/-/archive/%{libcmatrix_commit
 # some kind of workaround. This seemed simplest.
 # We do not want to provide a private library, which is from another
 # project, to be used in other packages.
-Patch0:  0001-hacky-hack.patch
+#Patch0:  0001-hacky-hack.patch
 
 BuildRequires:  meson
 BuildRequires:  cmake
@@ -68,10 +68,10 @@ works best with the phosh mobile DE.
 
 %prep
 # Copy private libjabber library in so we can build against it
-cp `pkg-config --variable=plugindir purple`/libjabber.so.0 /tmp/libjabber.so
+#cp `pkg-config --variable=plugindir purple`/libjabber.so.0 /tmp/libjabber.so
 
 %setup -a1 -n Chatty-v%{version}
-%patch -P 0 -p1
+#patch -P 0 -p1
 
 rm -rf subprojects/libcmatrix
 mv libcmatrix-%{libcmatrix_commit} subprojects/libcmatrix
@@ -84,8 +84,8 @@ mv libcmatrix-%{libcmatrix_commit} subprojects/libcmatrix
 %meson_install
 
 # Adding libjabber to link against
-mkdir -p %{buildroot}%{_libdir}
-cp `pkg-config --variable=plugindir purple`/libjabber.so.0 %{buildroot}%{_libdir}
+#mkdir -p %{buildroot}%{_libdir}
+#cp `pkg-config --variable=plugindir purple`/libjabber.so.0 %{buildroot}%{_libdir}
 
 # Adding ld.so.conf.d in order to use the libjabber at runtime
 mkdir -p %{buildroot}/%{_sysconfdir}/ld.so.conf.d
